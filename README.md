@@ -3,5 +3,6 @@
 - The discipline will be ministrated in the first period of 2024;
 
 ### Collaborators
-[Juan](https://github.com/Juanzeen)
-[Filipe](https://github.com/Filipe-Samuel-p)
+[Juan](https://github.com/Juanzeen) 👨‍🦱
+
+[Filipe](https://github.com/Filipe-Samuel-p) 👨
