@@ -5,7 +5,7 @@
 
 typedef struct arrConjuntos stConj;
 
-int *bubbleSort(int *arr, int size);
+stConj *bubbleSort(stConj *conjP);
 void show(stConj *conj);
 stConj *createConj();
 stConj *insert(stConj *conjP, int elP);

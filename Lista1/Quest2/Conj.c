@@ -9,7 +9,8 @@ typedef struct arrConjuntos
     int els[100];
 } stConj;
 
-int *bubbleSort(int *arr, int size)
+
+stConj *bubbleSort(stConj *conjP)
 {
     int change;
     int aux;
@@ -17,13 +18,13 @@ int *bubbleSort(int *arr, int size)
     while (true)
     {
         change = false;
-        for (int j = 0; j < size; j++)
+        for (int j = 0; j < conjP->length; j++)
         {
-            if (arr[j] > arr[j + 1] && arr[j + 1])
+            if (conjP->els[j] > conjP->els[j + 1] && conjP->els[j + 1])
             {
-                aux = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = aux;
+                aux = conjP->els[j];
+                conjP->els[j] = conjP->els[j + 1];
+                conjP->els[j + 1] = aux;
                 change = true;
                 j = 0;
             }
@@ -34,7 +35,7 @@ int *bubbleSort(int *arr, int size)
         }
     }
 
-    return arr;
+    return conjP;
 }
 
 void show(stConj *conj)
@@ -64,9 +65,7 @@ stConj *insert(stConj *conjP, int elP)
 {
     conjP->els[conjP->length] = elP;
     conjP->length++;
-    if (conjP->length > 0)
-        bubbleSort(conjP->els, conjP->length);
-    return conjP;
+    return bubbleSort(conjP);
 }
 
 stConj *removeEl(stConj *conjP, int removeEl)
@@ -104,8 +103,8 @@ int smaller(stConj *conjP)
 }
 
 int bigger(stConj *conjP)
-{
-    return conjP->els[conjP->length];
+{   
+    return conjP->els[conjP->length-1];
 }
 
 stConj *intersection(stConj *conj1, stConj *conj2)
@@ -151,7 +150,7 @@ stConj *intersection(stConj *conj1, stConj *conj2)
 
 stConj *unionF(stConj *conj1, stConj *conj2)
 {
-    stConj *unit = createConj();
+    stConj *unit = createConj(), *intersectionP = intersection(conj1, conj2);
     int itsDifferent;
 
     int bigger = conj1->length > conj2->length ? 1 : 2;
@@ -165,9 +164,10 @@ stConj *unionF(stConj *conj1, stConj *conj2)
         for (int i = 0; i < conj2->length; i++)
         {
             itsDifferent = 0;
-            for (int j = 0; j < unit->length; j++)
+            for (int j = 0; j < intersectionP->length; j++)
             {
-                itsDifferent = conj2->els[i] != unit->els[j] ? 1 : 0;
+                itsDifferent = conj2->els[i] != intersectionP->els[j]? 1 : 0;
+                if(itsDifferent == 0) break; 
             }
             if (itsDifferent)
                 insert(unit, conj2->els[i]);
@@ -184,7 +184,8 @@ stConj *unionF(stConj *conj1, stConj *conj2)
             itsDifferent = 0;
             for (int j = 0; j < unit->length; j++)
             {
-                itsDifferent = conj1->els[i] != unit->els[j] ? 1 : 0;
+                 itsDifferent = conj1->els[i] != intersectionP->els[j]? 1 : 0;
+                if(itsDifferent == 0) break; 
             }
             if (itsDifferent)
                 insert(unit, conj1->els[i]);
@@ -198,11 +199,6 @@ stConj *difference(stConj *conj1, stConj *conj2)
 {
     stConj *diff = createConj();
     int itsDifferent = 0;
-
-    int bigger = conj1->length > conj2->length ? 1 : 2;
-
-    if (bigger == 1)
-    {
         for (int i = 0; i < conj1->length; i++)
         {
             itsDifferent = 0; 
@@ -217,23 +213,6 @@ stConj *difference(stConj *conj1, stConj *conj2)
                      if(itsDifferent)
                         insert(diff, conj1->els[i]); 
                
-        }
-    }
-    else
-    {
-        for (int i = 0; i < conj2->length; i++)
-        {
-            itsDifferent = 0;
-                for (int j = 0; j < conj1->length; j++)
-                {
-                    itsDifferent = conj2->els[i] != conj1->els[j] ? 1 : 0;
-                    if (!itsDifferent){
-                        break;
-                     }
-                }
-                     if(itsDifferent)
-                        insert(diff, conj2->els[i]); 
-        }
     }
 
     return diff;
