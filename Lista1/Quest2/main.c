@@ -6,13 +6,10 @@ int main (void){
     stConj *conju = createConj();
     insert(conjzn, 2);
     insert(conjzn, 4);
-    insert(conjzn, 5);
     insert(conjzn, 3);
-    insert(conjzn, 6);
 
     insert(conju, 3);
-    insert(conju, 8);
-    insert(conju, 14);
+    insert(conju, 4);
     insert(conju, 2);
 
     show(conjzn);
@@ -35,7 +32,8 @@ int main (void){
     printf("The difference: ");
     show(myDifference);
 
-    printf("Checking if the conj1 has the 5 element (1 = true, 0 = false): %d", hasEl(conju, 5));
+    printf("Checking if the conj1 has the 3 element: %s\n", hasEl(conju, 3)? "true" : "false");
+    printf("Checking if the sets are equals: %s\n", checkEqual(conju, conjzn)? "true" : "false");
 
     explodeSet(conjzn);
     explodeSet(conju);

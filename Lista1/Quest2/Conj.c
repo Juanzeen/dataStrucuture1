@@ -82,15 +82,15 @@ stConj *removeEl(stConj *conjP, int removeEl)
     return conjWRemoved;
 }
 
-int hasEl(stConj *conjP, int srcEl)
+bool hasEl(stConj *conjP, int srcEl)
 {
-    int has = 0;
+    bool has = false;
 
     for (int i = 0; i < conjP->length; i++)
     {
         if (conjP->els[i] == srcEl)
         {
-            has = 1;
+            has = true;
             break;
         }
     }
@@ -216,6 +216,22 @@ stConj *difference(stConj *conj1, stConj *conj2)
     }
 
     return diff;
+}
+
+bool checkEqual(stConj *conj1, stConj *conj2){
+    bool itsEqual = false;
+
+    if(conj1->length == conj2->length){
+        for(int i = 0; i<conj1->length; i++){
+           itsEqual = conj1->els[i] == conj2->els[i]? true : false;
+           if(itsEqual == false){
+            break;
+           }
+            return itsEqual;
+        }
+    }else{
+        return itsEqual;
+    }
 }
 
 void explodeSet(stConj *willBeExploded){
