@@ -10,10 +10,10 @@ typedef struct node{
     struct node *link;
 }NODE;
 
+
 void clearScreen() { 
     system("clear"); 
 }
-
 
 
 int emptyList(NODE *head){
