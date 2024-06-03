@@ -10,7 +10,7 @@ int empty(NodePoly *head){
     return (head->link == NULL ) ? 1:0;
 }
 
-void node(NodePoly *head, int coef, int grau){
+void insertNodePoly(NodePoly *head, int coef, int grau){
     NodePoly *newNode = (NodePoly*)malloc(sizeof(NodePoly));
     if(newNode){
         newNode->coefficient = coef;
@@ -54,26 +54,26 @@ void sumOfPoly(NodePoly *head1, NodePoly *head2, NodePoly *head3){
     
     do{
         if(aux1 == NULL && aux2!= NULL){
-            node(head3,aux2->coefficient,aux2->degree);
+            insertNodePoly(head3,aux2->coefficient,aux2->degree);
             aux2 = aux2->link;
         }
         else if(aux1 != NULL && aux2 == NULL){
-            node(head3,aux1->coefficient,aux1->degree);
+            insertNodePoly(head3,aux1->coefficient,aux1->degree);
             aux1= aux1->link;
         }
 
         else if(aux1->degree == aux2->degree){
             int sum = aux1->coefficient + aux2->coefficient;
-            node(head3, sum, aux1->degree);
+            insertNodePoly(head3, sum, aux1->degree);
             aux1 = aux1->link;
             aux2 = aux2->link;
         }
         else if(aux1->degree > aux2->degree){
-            node(head3,aux1->coefficient,aux1->degree);
+            insertNodePoly(head3,aux1->coefficient,aux1->degree);
             aux1 = aux1->link;
         }  
         else{
-            node(head3, aux2->coefficient,aux2->degree);
+            insertNodePoly(head3, aux2->coefficient,aux2->degree);
             aux2 = aux2->link;
         } 
     } while(!(aux1 == NULL && aux2 == NULL));
@@ -98,7 +98,7 @@ int main(void){
             printf("\n\n Digite o coeficiente da variavel de expoente %d: ", grau);
             int coef;
             scanf("%d", &coef);
-            node(poly1, coef, grau);
+            insertNodePoly(poly1, coef, grau);
             grau--;
         }
 
@@ -109,7 +109,7 @@ int main(void){
             printf("\n\n Digite o coeficiente da variavel de expoente %d: ", grau);
             int coef;
             scanf("%d", &coef);
-            node(poly2, coef, grau);
+            insertNodePoly(poly2, coef, grau);
             grau--;
         }
 
