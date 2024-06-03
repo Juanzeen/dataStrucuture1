@@ -4,55 +4,63 @@
 typedef struct stack{
     int data;
     struct stack *link;
-} Stack;
+} StackItems;
+
+typedef struct headStack{
+    StackItems *top;
+    int *topElement;
+} HeadStack;
 
 
-void startStack(Stack *stack){
-    stack->link = NULL;
+void startStack(HeadStack *head){
+    head->top = NULL;
 }
 
-int empty(Stack *stack){
-     return (stack->link == NULL) ? 1:0;
+int empty(HeadStack *head){
+     return (head->top == NULL) ? 1:0;
 }
 
-void push(Stack *head, int x){
-    Stack *newNodo = (Stack*)malloc(sizeof(Stack));
+void push(HeadStack *head, int x){
+    StackItems *newNodo = (StackItems*)malloc(sizeof(StackItems));
     if(newNodo){
         newNodo->data = x;
     }
 
     if(empty(head)){
-        head->link = newNodo;
+        head->top = newNodo;
         newNodo->link = NULL;
+        head->topElement = &newNodo->data;
     } 
     else{
-        Stack *oldHead = head->link;
-        head->link = newNodo;
+        StackItems *oldHead = head->top;
+        head->top = newNodo;
         newNodo->link = oldHead;
+        head->topElement = &newNodo->data;
     }
     printf("\n Elemento inserido\n");
 
 }
 
-void pop(Stack *head){
+void pop(HeadStack *head){
     if(empty(head)){
         printf("\n Underflow\n");
     }
     else{
-        Stack *aux = head->link;
+        StackItems *aux = head->top;
         printf("\n Elemento removido %d\n", aux->data);
-        head->link = head->link->link;
+        head->top= head->top->link;
+        head->topElement = &head->top->data;
         free(aux);
     }
 }
 
-int sizeStack(Stack *head){
+int sizeStack(HeadStack *head){
     int counter = 0;
     if(empty(head)){
         return counter;
     }
     else{
-        Stack *aux = head->link;
+        StackItems *aux = head->top;
         while(aux != NULL){
             aux = aux->link;
             counter += 1;
@@ -61,15 +69,15 @@ int sizeStack(Stack *head){
     }
 }
 
-void stackElementsRemoved(Stack *head){
+void stackElementsRemoved(HeadStack *head){
     if(empty(head)){
         printf("\nUnderflow\n ");
     }
     else{
-        Stack *currentNode = head->link;
+        StackItems *currentNode = head->top;
         while(currentNode != NULL){
             printf("\nElemento removido %d", currentNode->data);
-            Stack *aux = currentNode;
+            StackItems *aux = currentNode;
             currentNode = currentNode->link;
             free(aux); 
         } 
@@ -78,24 +86,24 @@ void stackElementsRemoved(Stack *head){
 }
 
 
-void topElement(Stack *head){
+void topElement(HeadStack *head){
     if(empty(head)){
         printf("\nUnderflow\n");
     }
     else{
-        int topElement = head->link->data;
-        printf("\nO elemento do topo é %d", topElement);
+        printf("\nO elemento do topo é %d", *head->topElement);
     }
 }
 
-void freeStack(Stack *head){
+void freeStack(HeadStack *head){
     if(empty(head)){
         free(head);
     }
     else{
-        Stack *currentNode = head->link;
+        
+        StackItems *currentNode = head->top;
         while(currentNode != NULL){
-            Stack *aux = currentNode;
+            StackItems *aux = currentNode;
             currentNode = currentNode->link;
             free(aux);
         }
@@ -105,7 +113,7 @@ void freeStack(Stack *head){
 }
 
 int main(void){
-  Stack *pilha = (Stack*)malloc(sizeof(Stack));
+  HeadStack *pilha = (HeadStack*)malloc(sizeof(HeadStack));
   if(pilha != NULL){
      startStack(pilha);
   }
