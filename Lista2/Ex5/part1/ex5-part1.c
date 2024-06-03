@@ -69,7 +69,7 @@ void insertionEnd(NODE *head, int x){
 }
 
 
-void inserirOrdenado(NODE *head, int x) {
+void insertOrdered(NODE *head, int x) {
 
     NODE *newNodo = (NODE*)malloc(sizeof(NODE));
     newNodo->data = x;
@@ -130,7 +130,7 @@ void removeSpecific(NODE *head, int number){
     }
     else{
         NODE *beforeSpecific, *specificNode = head->link;
-        
+
         while(specificNode->link != NULL && specificNode->data != number){
             beforeSpecific = specificNode;
             specificNode = specificNode->link;
@@ -251,7 +251,7 @@ int main(void){
              
                 printf("\n Digite o numero que deseja inserir: ");
                 scanf("%d", &number);
-                inserirOrdenado(head, number);
+                insertOrdered(head, number);
                 printf("\nElemento inserido");
                 break;
             
