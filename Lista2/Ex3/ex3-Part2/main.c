@@ -85,7 +85,7 @@ int size(HeadQueue *head){
     }
 }
 
-void freeEqueue(HeadQueue *head){
+void freeQueue(HeadQueue *head){
     if(empty(head)){
         free(head);
     }
@@ -141,7 +141,7 @@ int main (void){
                 printf("\nExistem %d elementos na fila\n", size(head));
                 break;
             case 6:
-                freeEqueue(head);
+                freeQueue(head);
                 exit(1);
                 break;
             case 7:
