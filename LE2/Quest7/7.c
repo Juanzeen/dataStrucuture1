@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
+#define LENGTH 2
 typedef struct element{ //struct dos elementos
     char name[2];
-    float value2k, value90;
-    stElement *next;
+    int value2k, value90;
+    struct element *next;
 }stElement;
 
 typedef struct list{//struct da lista
@@ -22,6 +22,7 @@ stElement *findLast(stList *list){
 
 void insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2000
     stElement *source = list->source2k;
+    
 
     if(!source){//quando a raiz é vazia
         list->source2k = el;
@@ -42,7 +43,7 @@ void insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2
                     stElement *aux = iterableNode->next;
                     el->next = aux;
                     iterableNode->next = el;
-
+                    break;
                 }
             }
         }
@@ -55,27 +56,32 @@ void insertIn90(stList *list, stElement *el){
     stElement *source = list->source90;
 }
 
+void showList2k(stList *list){
+    stElement *showElement = list->source2k;
+    while(showElement){
+        printf("The state of: %s had in 2000 the population of: %d\n", showElement->name, showElement->value2k);
+        showElement = showElement->next;
+    }
+}
+
 int main(void){
-    stElement *baseArray[20];
     stList *multiLinkList;
 
-    *baseArray = (stElement*)malloc(sizeof(stElement));
     multiLinkList = (stList*)malloc(sizeof(stList));
+    for(int i = 0; i < LENGTH; i++){
+        stElement *currentEl;
+        currentEl = (stElement*)malloc(sizeof(stElement)) ;
 
-    for(int i = 0; i < 20; i++){
         printf("Put here the name of the area with abreviation (ex: New York - NY): ");
-        scanf("%s", baseArray[i]->name);
+        scanf("%s", &currentEl->name);
         printf("Put here the census of the area in 2k: ");
-        scanf("%s", baseArray[i]->value2k);
+        scanf("%d", &currentEl->value2k);
         printf("Put here the name of the area in 90: ");
-        scanf("%s", baseArray[i]->value90);
-
-        insertIn2k(multiLinkList->source2k, baseArray[i]);
-        insertIn90(multiLinkList->source2k, baseArray[i]);
-
+        scanf("%d", &currentEl->value90);
+        insertIn2k(multiLinkList, currentEl);
+        free(currentEl);
     }
-
-
-
+        printf("State: %s and census: %d", multiLinkList->source2k->name, multiLinkList->source2k->value2k);
+        showList2k(multiLinkList);
     return 0;
 }
