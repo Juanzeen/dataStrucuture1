@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#define LENGTH 2
+#define LENGTH 1
 typedef struct element{ //struct dos elementos
     char name[2];
     int value2k, value90;
@@ -12,32 +12,54 @@ typedef struct list{//struct da lista
     stElement *source2k, *source90, *last2k, *last90;
 }stList;
 
+stElement *createEl(){
+    stElement *elementParam = (stElement*)malloc(sizeof(stElement));
+    elementParam->next = NULL;
+    elementParam->value2k = 0;
+    elementParam->value90 = 0;
+    elementParam->name[2] = "df";//se eu nao coloco predefinido ele nao fica salvo depois de ler e inserir, se eu coloco ele dá segmentation fault
+    return elementParam;
+}
+stList *createList(){
+    stList *multiLinkList = (stList*)malloc(sizeof(stList));
+    multiLinkList->source2k = createEl();
+    multiLinkList->last2k = createEl();
+    multiLinkList->source90 = createEl();
+    multiLinkList->last90 = createEl();
+}
+
 stElement *findLast(stList *list){
-    stElement *iterableNode = list->source2k;
+    stElement *iterableNode = createEl();
+    iterableNode = list->source2k;
     while(iterableNode->next){
         iterableNode = iterableNode->next;
     }
     return iterableNode;
 }
 
-void insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2000
-    stElement *source = list->source2k;
-    
+void *insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2000
 
-    if(!source){//quando a raiz é vazia
+    if(list->source2k == NULL){//quando a raiz é vazia
         list->source2k = el;
         list->last2k = el;
-    }else if(source->value2k > el->value2k){//quando o elemento é menor que a raiz
-        stElement *aux = source;
+        printf("entrei aqui na funcao de nao ter raiz!\n");
+    }else if(list->source2k->value2k > el->value2k){//quando o elemento é menor que a raiz
+        stElement *aux = list->source2k;
         list->source2k = el;
         list->source2k->next = aux;
+        printf("entrei aqui na funcao de inserir antes da raiz\n");
     }else{//casos onde não é mais necessário verificar a raiz
         if(el->value2k > list->last2k->value2k){//verificando se é maior que o último elemento
-            stElement *aux = list->last2k;
+            printf("entrei aqui na funcao de inserir no final!\n");
+            stElement *aux = createEl();
+            aux = list->last2k;
             aux->next = el;
             list->last2k = el;
+
         }else{//caso onde o elemento vai ser inserido no meio da lista
-            stElement *iterableNode = list->source2k;
+        printf("entrei aqui na funcao de inserir no meio da lista\n");
+            stElement *iterableNode = createEl();
+            iterableNode = list->source2k;
             while(iterableNode->next){//percorre enquanto tiver proximo pois quando nao tiver mais é o ultimo
                 if(iterableNode->next->value2k > el->value2k){
                     stElement *aux = iterableNode->next;
@@ -50,6 +72,8 @@ void insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2
         
     }
 
+      printf("valor da raiz %d e valor do que será inserido: %d\n", list->source2k->value2k, el->value2k);
+
 }
 
 void insertIn90(stList *list, stElement *el){
@@ -57,7 +81,8 @@ void insertIn90(stList *list, stElement *el){
 }
 
 void showList2k(stList *list){
-    stElement *showElement = list->source2k;
+    stElement *showElement = createEl();
+    showElement = list->source2k;
     while(showElement){
         printf("The state of: %s had in 2000 the population of: %d\n", showElement->name, showElement->value2k);
         showElement = showElement->next;
@@ -67,12 +92,11 @@ void showList2k(stList *list){
 int main(void){
     stList *multiLinkList;
 
-    multiLinkList = (stList*)malloc(sizeof(stList));
+    multiLinkList = createList();
     for(int i = 0; i < LENGTH; i++){
-        stElement *currentEl;
-        currentEl = (stElement*)malloc(sizeof(stElement)) ;
+        stElement *currentEl = createEl();
 
-        printf("Put here the name of the area with abreviation (ex: New York - NY): ");
+        printf("Put here the name of the area with abreviation (ex: New York = NY): ");
         scanf("%s", &currentEl->name);
         printf("Put here the census of the area in 2k: ");
         scanf("%d", &currentEl->value2k);
@@ -81,7 +105,7 @@ int main(void){
         insertIn2k(multiLinkList, currentEl);
         free(currentEl);
     }
-        printf("State: %s and census: %d", multiLinkList->source2k->name, multiLinkList->source2k->value2k);
+           printf("valor da raiz %d\n\n", multiLinkList->source2k->value2k);//o valor nao é exibido aqui, nao sei o porque, porque aparentemente ta tudo certo.
         showList2k(multiLinkList);
     return 0;
 }
