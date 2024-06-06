@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#define LENGTH 1
+#define LENGTH 2
 typedef struct element{ //struct dos elementos
     char name[2];
     int value2k, value90;
@@ -14,10 +14,6 @@ typedef struct list{//struct da lista
 
 stElement *createEl(){
     stElement *elementParam = (stElement*)malloc(sizeof(stElement));
-    elementParam->next = NULL;
-    elementParam->value2k = 0;
-    elementParam->value90 = 0;
-    elementParam->name[2] = "df";//se eu nao coloco predefinido ele nao fica salvo depois de ler e inserir, se eu coloco ele dá segmentation fault
     return elementParam;
 }
 stList *createList(){
@@ -26,6 +22,10 @@ stList *createList(){
     multiLinkList->last2k = createEl();
     multiLinkList->source90 = createEl();
     multiLinkList->last90 = createEl();
+
+    if(multiLinkList)
+        return multiLinkList;
+    else return NULL;
 }
 
 stElement *findLast(stList *list){
@@ -37,9 +37,9 @@ stElement *findLast(stList *list){
     return iterableNode;
 }
 
-void *insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2000
+stList *insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 2000
 
-    if(list->source2k == NULL){//quando a raiz é vazia
+    if(!list->source2k->value2k){//quando a raiz é vazia
         list->source2k = el;
         list->last2k = el;
         printf("entrei aqui na funcao de nao ter raiz!\n");
@@ -72,8 +72,8 @@ void *insertIn2k(stList *list, stElement *el){//inserindo elementos na lista de 
         
     }
 
-      printf("valor da raiz %d e valor do que será inserido: %d\n", list->source2k->value2k, el->value2k);
-
+      printf("Dentro da função: valor da raiz %d e valor do que será inserido: %d\n", list->last2k->value2k, el->value2k);
+      return list;
 }
 
 void insertIn90(stList *list, stElement *el){
@@ -102,10 +102,10 @@ int main(void){
         scanf("%d", &currentEl->value2k);
         printf("Put here the name of the area in 90: ");
         scanf("%d", &currentEl->value90);
-        insertIn2k(multiLinkList, currentEl);
+        multiLinkList = insertIn2k(multiLinkList, currentEl);
         free(currentEl);
     }
-           printf("valor da raiz %d\n\n", multiLinkList->source2k->value2k);//o valor nao é exibido aqui, nao sei o porque, porque aparentemente ta tudo certo.
+           printf("Na main: valor da raiz %d\n\n", multiLinkList->source2k->value2k);//o valor nao é exibido aqui, nao sei o porque, porque aparentemente ta tudo certo.
         showList2k(multiLinkList);
     return 0;
 }
