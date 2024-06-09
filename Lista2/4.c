@@ -106,21 +106,22 @@ void searchingResult(stQueue *queue)
 {
     int twoInRow = 0;
     void *dequedOperator = NULL , *dequedNumber1= NULL , *dequedNumber2 = NULL;
-    bool haveOperator = false;
+    bool haveOperator = false, haveApplied = false;
 
    for(queue->start; queue->start <= queue->end && queue->end < MAX; queue->start){
-    showQueue(queue);
+    //showQueue(queue);
     if(isOperator(queue->array[queue->start])){//quando sabemos que é operador
      if(haveOperator){//se já tinha um operador antes, ele é inserido ao final
         enqueue(queue, dequedOperator);
-        if(dequedNumber1){//remoção de numero no seguinte caso: apareceu um operador, em seguida veio um numero e logo depois outro operador
-                            //resumidamente, remove um numero entre dois operadores
-            enqueue(queue,dequedNumber1);
-            dequedNumber1 = NULL;
         }
+    if(dequedNumber1){//remoção de numero no seguinte caso: apareceu um operador, em seguida veio um numero e logo depois outro operador
+                            //resumidamente, remove um numero entre dois operadores
+        enqueue(queue,dequedNumber1);
+        dequedNumber1 = NULL;
      }
      dequedOperator = dequeue(queue);
      haveOperator = true;
+     haveApplied = false;
      twoInRow =  0; //reinicizalizando contagem de numeros depois de um operador e pegando um operador novo     
     }
      else{//aqui vem somente os operandos
@@ -132,13 +133,15 @@ void searchingResult(stQueue *queue)
             queue->result = applyOperator(dequedOperator, dequedNumber1, dequedNumber2);
             enqueue(queue, queue->result);
             haveOperator = false;
+            haveApplied = true;
             twoInRow = 0;
             dequedNumber1 = NULL;
             dequedNumber2 = NULL;        
         }else{//caso onde acabou de ser feita uma operação e em seguida vem um outro numero
+            if(haveApplied){
             dequedNumber1 = dequeue(queue);
-            if(dequedNumber1 == queue->array[queue->end]) break;
             enqueue(queue, dequedNumber1);
+            }
         }
     }
    }
@@ -163,6 +166,6 @@ int main(void)
     enqueue(queue, 3);
     showQueue(queue);    
     searchingResult(queue);
-    printf("\n\nMy result was: %d\n", queue->result);
+    printf("The result was: %d\n", queue->result);
     return 0;
 }
