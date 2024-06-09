@@ -41,6 +41,13 @@ stList *createList()
     }
 }
 
+stElement *putInfos(char *name, int value2k, int value90){
+    stElement *addingElement = createEl();
+    addingElement->name = name;
+    addingElement->value2k = value2k;
+    addingElement->value90 = value90;
+
+}
 
 void *insertIn2k(stList *list, stElement *el)
 { // inserindo elementos na lista de 2000
@@ -154,29 +161,17 @@ int main(void)
     multiLinkList = createList();
     stElement *el, *el1, *el2, *el3, *el4, *el5;
     el = createEl();
-    el->name = "NY";
-    el->value2k = 21199865;
-    el->value90 = 19549649;
+    el = putInfos("NY", 21199865,19549649);
     el1 = createEl();
-    el1->name = "LA";
-    el1->value2k = 16373645;
-    el1->value90 = 14531529;
+    el1 = putInfos("LA", 16373645, 14531529);
     el2 = createEl();
-    el2->name = "SF";
-    el2->value2k = 7039362;
-    el2->value90 = 6253311;
+    el2 = putInfos("SF", 7039362, 6253311);
     el3 = createEl();
-    el3->name = "MI";
-    el3->value2k = 3876380;
-    el3->value90 = 3192582;
+    el3 = putInfos("MI", 3876380, 3192582);
     el4 = createEl();
-    el4->name = "DE";
-    el4->value2k = 2581506;
-    el4->value90 = 1980140;
+    el4 = putInfos("DE", 2581506, 1980140);
     el5 = createEl();
-    el5->name = "SJ";
-    el5->value2k = 2450292;
-    el5->value90 = 2270808;
+    el5 = putInfos("SJ", 2450292, 2270808);
     insertIn2k(multiLinkList, el);
     insertIn2k(multiLinkList, el1);
     insertIn2k(multiLinkList, el2);
