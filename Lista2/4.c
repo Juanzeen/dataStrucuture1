@@ -26,15 +26,14 @@ void *dequeue(stQueue *queue)
     return returningChar;
 }
 
-void enqueue(stQueue *queue, void* el)
+void enqueue(stQueue *queue, void *el)
 {
     queue->array[queue->end] = el;
     queue->end++;
 }
 
-
 bool isOperator(void *el)
-{   
+{
     char convertedEl = (char)el;
     switch (convertedEl)
     {
@@ -86,65 +85,77 @@ int applyOperator(char operator, int n1, int n2)
     }
 }
 
-
 void showQueue(stQueue *queue)
 {
     for (int i = 0; i < queue->end; i++)
     {
-        if(isOperator(queue->array[i])){
+        if (isOperator(queue->array[i]))
+        {
             printf("|%c", queue->array[i]);
-        }else{
-        printf("|%d", queue->array[i]);
+        }
+        else
+        {
+            printf("|%d", queue->array[i]);
         }
     }
 
     printf("\n");
 }
 
-
 void searchingResult(stQueue *queue)
 {
     int twoInRow = 0;
-    void *dequedOperator = NULL , *dequedNumber1= NULL , *dequedNumber2 = NULL;
+    void *dequedOperator = NULL, *dequedNumber1 = NULL, *dequedNumber2 = NULL;
     bool haveOperator = false, haveApplied = false;
 
-   for(queue->start; queue->start <= queue->end && queue->end < MAX; queue->start){
-    //showQueue(queue);
-    if(isOperator(queue->array[queue->start])){//quando sabemos que é operador
-     if(haveOperator){//se já tinha um operador antes, ele é inserido ao final
-        enqueue(queue, dequedOperator);
+    for (queue->start; queue->start <= queue->end && queue->end < MAX; queue->start)
+    {
+        // showQueue(queue);
+        if (isOperator(queue->array[queue->start]))
+        { // quando sabemos que é operador
+            if (haveOperator)
+            { // se já tinha um operador antes, ele é inserido ao final
+                enqueue(queue, dequedOperator);
+            }
+            if (dequedNumber1)
+            { // remoção de numero no seguinte caso: apareceu um operador, em seguida veio um numero e logo depois outro operador
+              // resumidamente, remove um numero entre dois operadores
+                enqueue(queue, dequedNumber1);
+                dequedNumber1 = NULL;
+            }
+            dequedOperator = dequeue(queue);
+            haveOperator = true;
+            haveApplied = false;
+            twoInRow = 0; // reinicizalizando contagem de numeros depois de um operador e pegando um operador novo
         }
-    if(dequedNumber1){//remoção de numero no seguinte caso: apareceu um operador, em seguida veio um numero e logo depois outro operador
-                            //resumidamente, remove um numero entre dois operadores
-        enqueue(queue,dequedNumber1);
-        dequedNumber1 = NULL;
-     }
-     dequedOperator = dequeue(queue);
-     haveOperator = true;
-     haveApplied = false;
-     twoInRow =  0; //reinicizalizando contagem de numeros depois de um operador e pegando um operador novo     
-    }
-     else{//aqui vem somente os operandos
-        if(twoInRow ==  0 && haveOperator){//ocorrencia de primeiro numero quando existe operador
-            dequedNumber1 = dequeue(queue);
-            twoInRow++;
-        }else if(twoInRow == 1 && haveOperator){//ja existindo um primeiro numero e um operador, faz operação e insere ao fim
-            dequedNumber2 = dequeue(queue);
-            queue->result = applyOperator(dequedOperator, dequedNumber1, dequedNumber2);
-            enqueue(queue, queue->result);
-            haveOperator = false;
-            haveApplied = true;
-            twoInRow = 0;
-            dequedNumber1 = NULL;
-            dequedNumber2 = NULL;        
-        }else{//caso onde acabou de ser feita uma operação e em seguida vem um outro numero
-            if(haveApplied){
-            dequedNumber1 = dequeue(queue);
-            enqueue(queue, dequedNumber1);
+        else
+        { // aqui vem somente os operandos
+            if (twoInRow == 0 && haveOperator)
+            { // ocorrencia de primeiro numero quando existe operador
+                dequedNumber1 = dequeue(queue);
+                twoInRow++;
+            }
+            else if (twoInRow == 1 && haveOperator)
+            { // ja existindo um primeiro numero e um operador, faz operação e insere ao fim
+                dequedNumber2 = dequeue(queue);
+                queue->result = applyOperator(dequedOperator, dequedNumber1, dequedNumber2);
+                enqueue(queue, queue->result);
+                haveOperator = false;
+                haveApplied = true;
+                twoInRow = 0;
+                dequedNumber1 = NULL;
+                dequedNumber2 = NULL;
+            }
+            else
+            { // caso onde acabou de ser feita uma operação e em seguida vem um outro numero
+                if (haveApplied)
+                {
+                    dequedNumber1 = dequeue(queue);
+                    enqueue(queue, dequedNumber1);
+                }
             }
         }
     }
-   }
 }
 
 int main(void)
@@ -164,7 +175,7 @@ int main(void)
     enqueue(queue, 8);
     enqueue(queue, 6);
     enqueue(queue, 3);
-    showQueue(queue);    
+    showQueue(queue);
     searchingResult(queue);
     printf("The result was: %d\n", queue->result);
     return 0;

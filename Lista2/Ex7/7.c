@@ -41,12 +41,12 @@ stList *createList()
     }
 }
 
-stElement *putInfos(char *name, int value2k, int value90){
+stElement *putInfos(char *name, int value2k, int value90)
+{
     stElement *addingElement = createEl();
     addingElement->name = name;
     addingElement->value2k = value2k;
     addingElement->value90 = value90;
-
 }
 
 void *insertIn2k(stList *list, stElement *el)
@@ -161,7 +161,7 @@ int main(void)
     multiLinkList = createList();
     stElement *el, *el1, *el2, *el3, *el4, *el5;
     el = createEl();
-    el = putInfos("NY", 21199865,19549649);
+    el = putInfos("NY", 21199865, 19549649);
     el1 = createEl();
     el1 = putInfos("LA", 16373645, 14531529);
     el2 = createEl();
