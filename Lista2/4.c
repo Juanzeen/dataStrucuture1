@@ -2,15 +2,16 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#define MAX 7
+#define MAX 50
 
-typedef struct queue{
-    char array[MAX];
+typedef struct queue
+{
+    void *array[MAX];
     int start, end, result;
-}stQueue;
+} stQueue;
 
-
-stQueue *createQueue(){
+stQueue *createQueue()
+{
     stQueue *queue = (stQueue *)malloc(sizeof(stQueue));
     queue->start = 0;
     queue->end = 0;
@@ -18,35 +19,24 @@ stQueue *createQueue(){
     return queue;
 }
 
-void showQueue(stQueue *queue){
-    for(queue->start; queue->start < queue->end ; queue->start++){
-        printf("|%c", queue->array[queue->start]);
-    }
-}
-
-char dequeue(stQueue * queue){
-    char returningChar = queue->array[queue->start];
+void *dequeue(stQueue *queue)
+{
+    void *returningChar = queue->array[queue->start];
     queue->start++;
     return returningChar;
 }
 
-void enqueue(stQueue *queue, char el){
+void enqueue(stQueue *queue, void* el)
+{
     queue->array[queue->end] = el;
     queue->end++;
 }
 
-void fillQueue(stQueue *queue, int length){
-    for(int i = 0; i < length; i++){
-        printf("Put the %d operator or operand: ",i+1);
-        scanf(" %c", queue->array[queue->end]);
-        fflush(stdin);
-        queue->end++;
-    }
-}
 
-
-bool isOperator(char el){
-     switch (el)
+bool isOperator(void *el)
+{
+    char convertedEl = (char)el;
+    switch (convertedEl)
     {
     case '+':
         return true;
@@ -63,70 +53,110 @@ bool isOperator(char el){
     case '/':
         return true;
         break;
-    
+
     default:
         return false;
         break;
     }
-
 }
 
-int applyOperator(char operator, char n1, char n2){
+int applyOperator(char operator, int n1, int n2)
+{
     switch (operator)
     {
     case '+':
-        return (int)n1 + (int)n2;
+        return n1 + n2;
         break;
 
     case '-':
-        return (int)n1 - (int)n2;
+        return n1 - n2;
         break;
 
     case '*':
-        return (int)n1 * (int)n2;
+        return n1 * n2;
         break;
 
     case '/':
-        return (int)n1 / (int)n2;
+        return n1 / n2;
         break;
-    
+
     default:
         return 0;
         break;
     }
 }
 
-int searchingResult(stQueue *queue){
-    int twoInRow = 0, result = 0;
-    stQueue *functionQueue;
 
-    for(queue->start; queue->start < queue->end ; queue->start++){
-
-
-        if(isOperator(queue->start)){//se for constatado que é um operador
-            twoInRow = 0;
-            char dequedOperator = dequeue(queue);     
-        }else{//não é operador
-            char dequedNumber = dequeue(queue);
-            twoInRow++;//incrementa um para a conferencia se temos dois numeros seguidos
+void showQueue(stQueue *queue)
+{
+    for (int i = 0; i < queue->end; i++)
+    {
+        if(isOperator(queue->array[i])){
+            printf("|%c", queue->array[i]);
+        }else{
+        printf("|%d", queue->array[i]);
         }
     }
 }
 
-int main(void){
+
+void searchingResult(stQueue *queue)
+{
+    int twoInRow = 0, result;
+    void *dequedOperator , *dequedNumber1 , *dequedNumber2 ;
+    bool haveOperator = false;
+    printf("iu");
+
+    for (queue->start; queue->start <= queue->end && queue->end < MAX; queue->start)
+    {
+        if(queue->end == MAX){
+            printf("EXPLODE PRAGA RUIM");
+        }
+
+        if (isOperator(queue->start))
+        { // se for constatado que é um operador
+            twoInRow = 0;
+            dequedOperator = dequeue(queue);
+            haveOperator = true;
+            enqueue(queue, dequedNumber1);
+        }
+        else
+        { // não é operador
+        if(twoInRow == 0){
+            dequedNumber1 = dequeue(queue);
+            twoInRow++; // incrementa um para a conferencia se temos dois numeros seguidos
+            }
+        else if(twoInRow == 1){//as operações dependem de dois numeros, exceção para achar o segundo
+            dequedNumber2 = dequeue(queue);
+            twoInRow++;
+            }
+        }
+
+        if (twoInRow == 2 && haveOperator && dequedNumber1 && dequedNumber2)
+        {
+            twoInRow = 0;
+            haveOperator = false;
+            queue->result = applyOperator(dequedOperator, dequedNumber1, dequedNumber2);
+            printf("\nO resultado parcial é: %d\n", result);   
+            enqueue(queue, queue->result);
+        } else if(twoInRow == 0 && haveOperator){
+            enqueue(queue, dequedOperator);
+            haveOperator = false;
+        }
+    }
+
+}
+
+int main(void)
+{
     stQueue *queue = createQueue();
-    int operationLength = 0;
-    //printf("Put here the operation length: ");
-    //scanf("%d", &operationLength);
-    //fillQueue(queue, operationLength);
+
     enqueue(queue, '+');
     enqueue(queue, '-');
-    enqueue(queue, '*');
-    enqueue(queue, '8');
-    enqueue(queue, '5');
-    enqueue(queue, '2');
-    enqueue(queue, '1');
-    showQueue(queue);
-
+    enqueue(queue, 8);
+    enqueue(queue, 5);
+    enqueue(queue, 2);
+    showQueue(queue);    
+    searchingResult(queue);
     return 0;
 }
