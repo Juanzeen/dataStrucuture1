@@ -34,7 +34,7 @@ void enqueue(stQueue *queue, void* el)
 
 
 bool isOperator(void *el)
-{
+{   
     char convertedEl = (char)el;
     switch (convertedEl)
     {
@@ -97,66 +97,72 @@ void showQueue(stQueue *queue)
         printf("|%d", queue->array[i]);
         }
     }
+
+    printf("\n");
 }
 
 
 void searchingResult(stQueue *queue)
 {
-    int twoInRow = 0, result;
-    void *dequedOperator , *dequedNumber1 , *dequedNumber2 ;
+    int twoInRow = 0;
+    void *dequedOperator = NULL , *dequedNumber1= NULL , *dequedNumber2 = NULL;
     bool haveOperator = false;
-    printf("iu");
 
-    for (queue->start; queue->start <= queue->end && queue->end < MAX; queue->start)
-    {
-        if(queue->end == MAX){
-            printf("EXPLODE PRAGA RUIM");
+   for(queue->start; queue->start <= queue->end && queue->end < MAX; queue->start){
+    showQueue(queue);
+    if(isOperator(queue->array[queue->start])){//quando sabemos que é operador
+     if(haveOperator){//se já tinha um operador antes, ele é inserido ao final
+        enqueue(queue, dequedOperator);
+        if(dequedNumber1){//remoção de numero no seguinte caso: apareceu um operador, em seguida veio um numero e logo depois outro operador
+                            //resumidamente, remove um numero entre dois operadores
+            enqueue(queue,dequedNumber1);
+            dequedNumber1 = NULL;
         }
-
-        if (isOperator(queue->start))
-        { // se for constatado que é um operador
+     }
+     dequedOperator = dequeue(queue);
+     haveOperator = true;
+     twoInRow =  0; //reinicizalizando contagem de numeros depois de um operador e pegando um operador novo     
+    }
+     else{//aqui vem somente os operandos
+        if(twoInRow ==  0 && haveOperator){//ocorrencia de primeiro numero quando existe operador
+            dequedNumber1 = dequeue(queue);
+            twoInRow++;
+        }else if(twoInRow == 1 && haveOperator){//ja existindo um primeiro numero e um operador, faz operação e insere ao fim
+            dequedNumber2 = dequeue(queue);
+            queue->result = applyOperator(dequedOperator, dequedNumber1, dequedNumber2);
+            enqueue(queue, queue->result);
+            haveOperator = false;
             twoInRow = 0;
-            dequedOperator = dequeue(queue);
-            haveOperator = true;
+            dequedNumber1 = NULL;
+            dequedNumber2 = NULL;        
+        }else{//caso onde acabou de ser feita uma operação e em seguida vem um outro numero
+            dequedNumber1 = dequeue(queue);
+            if(dequedNumber1 == queue->array[queue->end]) break;
             enqueue(queue, dequedNumber1);
         }
-        else
-        { // não é operador
-        if(twoInRow == 0){
-            dequedNumber1 = dequeue(queue);
-            twoInRow++; // incrementa um para a conferencia se temos dois numeros seguidos
-            }
-        else if(twoInRow == 1){//as operações dependem de dois numeros, exceção para achar o segundo
-            dequedNumber2 = dequeue(queue);
-            twoInRow++;
-            }
-        }
-
-        if (twoInRow == 2 && haveOperator && dequedNumber1 && dequedNumber2)
-        {
-            twoInRow = 0;
-            haveOperator = false;
-            queue->result = applyOperator(dequedOperator, dequedNumber1, dequedNumber2);
-            printf("\nO resultado parcial é: %d\n", result);   
-            enqueue(queue, queue->result);
-        } else if(twoInRow == 0 && haveOperator){
-            enqueue(queue, dequedOperator);
-            haveOperator = false;
-        }
     }
-
+   }
 }
 
 int main(void)
 {
     stQueue *queue = createQueue();
 
-    enqueue(queue, '+');
     enqueue(queue, '-');
-    enqueue(queue, 8);
-    enqueue(queue, 5);
+    enqueue(queue, '+');
+    enqueue(queue, '*');
+    enqueue(queue, 9);
+    enqueue(queue, '+');
     enqueue(queue, 2);
+    enqueue(queue, 8);
+    enqueue(queue, '*');
+    enqueue(queue, '+');
+    enqueue(queue, 4);
+    enqueue(queue, 8);
+    enqueue(queue, 6);
+    enqueue(queue, 3);
     showQueue(queue);    
     searchingResult(queue);
+    printf("\n\nMy result was: %d\n", queue->result);
     return 0;
 }
