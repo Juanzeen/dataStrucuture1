@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "Functions.h"
+
 typedef struct element
 { // struct dos elementos
     char *name;
@@ -56,8 +58,8 @@ void *insertIn2k(stList *list, stElement *el)
         list->source2k = el;
         list->last2k = el;
     }
-    else if (list->source2k->value2k > el->value2k)
-    { // quando o elemento é menor que a raiz
+    else if (el->value2k > list->source2k->value2k)
+    { // quando o elemento é maior que a raiz
         stElement *aux = createEl();
         aux = list->source2k;
         list->source2k = el;
@@ -65,12 +67,14 @@ void *insertIn2k(stList *list, stElement *el)
     }
     else
     { // casos onde não é mais necessário verificar a raiz
-        if (el->value2k > list->last2k->value2k)
-        { // verificando se é maior que o último elemento
+        if (el->value2k < list->last2k->value2k)
+        { // verificando se é menor que o último elemento
             stElement *aux = createEl();
             aux = list->last2k;
             aux->next = el;
             list->last2k = el;
+            list->last2k->next = NULL;
+            
         }
         else
         { // caso onde o elemento vai ser inserido no meio da lista
@@ -78,7 +82,7 @@ void *insertIn2k(stList *list, stElement *el)
             iterableNode = list->source2k;
             while (iterableNode->next)
             { // percorre enquanto tiver proximo pois quando nao tiver mais é o ultimo
-                if (iterableNode->next->value2k > el->value2k)
+                if (iterableNode->next->value2k < el->value2k)
                 {
                     stElement *aux = iterableNode->next;
                     el->next = aux;
@@ -89,6 +93,7 @@ void *insertIn2k(stList *list, stElement *el)
             }
         }
     }
+    
 }
 
 void insertIn90(stList *list, stElement *el)
@@ -98,8 +103,8 @@ void insertIn90(stList *list, stElement *el)
         list->source90 = el;
         list->last90 = el;
     }
-    else if (list->source90->value90 > el->value90)
-    { // quando o elemento é menor que a raiz
+    else if (el->value90 > list->source90->value90)
+    { // quando o elemento é maior que a raiz
         stElement *aux = createEl();
         aux = list->source90;
         list->source90 = el;
@@ -107,12 +112,13 @@ void insertIn90(stList *list, stElement *el)
     }
     else
     { // casos onde não é mais necessário verificar a raiz
-        if (el->value90 > list->last90->value90)
-        { // verificando se é maior que o último elemento
+        if (el->value90 < list->last90->value90)
+        { // verificando se é menor que o último elemento
             stElement *aux = createEl();
             aux = list->last90;
             aux->next = el;
             list->last90 = el;
+            list->last90->next = NULL;
         }
         else
         { // caso onde o elemento vai ser inserido no meio da lista
@@ -120,7 +126,7 @@ void insertIn90(stList *list, stElement *el)
             iterableNode = list->source90;
             while (iterableNode->next)
             { // percorre enquanto tiver proximo pois quando nao tiver mais é o ultimo
-                if (iterableNode->next->value90 > el->value90)
+                if (iterableNode->next->value90 < el->value90)
                 {
                     stElement *aux = iterableNode->next;
                     el->next = aux;
@@ -153,40 +159,4 @@ void showList90(stList *list)
         printf("The state of: %s had in 90 the population of: %d\n", showElement->name, showElement->value90);
         showElement = showElement->next;
     }
-}
-
-int main(void)
-{
-    stList *multiLinkList;
-    multiLinkList = createList();
-    stElement *el, *el1, *el2, *el3, *el4, *el5;
-    el = createEl();
-    el = putInfos("NY", 21199865,19549649);
-    el1 = createEl();
-    el1 = putInfos("LA", 16373645, 14531529);
-    el2 = createEl();
-    el2 = putInfos("SF", 7039362, 6253311);
-    el3 = createEl();
-    el3 = putInfos("MI", 3876380, 3192582);
-    el4 = createEl();
-    el4 = putInfos("DE", 2581506, 1980140);
-    el5 = createEl();
-    el5 = putInfos("SJ", 2450292, 2270808);
-    insertIn2k(multiLinkList, el);
-    insertIn2k(multiLinkList, el1);
-    insertIn2k(multiLinkList, el2);
-    insertIn2k(multiLinkList, el3);
-    insertIn2k(multiLinkList, el4);
-    insertIn2k(multiLinkList, el5);
-    insertIn90(multiLinkList, el);
-    insertIn90(multiLinkList, el1);
-    insertIn90(multiLinkList, el2);
-    insertIn90(multiLinkList, el3);
-    insertIn90(multiLinkList, el4);
-    insertIn90(multiLinkList, el5);
-    printf("Organization in 2k: \n");
-    showList2k(multiLinkList);
-    printf("\nOrganization in 90: \n");
-    showList90(multiLinkList);
-    return 0;
 }
