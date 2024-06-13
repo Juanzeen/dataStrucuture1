@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#define LENGTH  3
+#define LENGTH  32
 
 typedef struct stack {
     int top;
@@ -82,8 +82,8 @@ int main(void){
     stack1 = createStack();//
     stack2 = createStack();
     auxStack= createStack();
-    stack1 = fillStack("ana"); 
-    auxStack = fillStack("ana");
+    stack1 = fillStack("socorrammesubinoonibusemmarrocos"); 
+    auxStack = fillStack("socorrammesubinoonibusemmarrocos");
     show(stack1);
     stack2 = copyStackReverse(auxStack);
     free(auxStack);
