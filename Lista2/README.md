@@ -114,3 +114,30 @@ Criamos nossa estrutura queue, que tem um array de ponteiro void, pois vamos lid
 - Da mesma forma, também temos duas variáveis para o last, que representa o último elemento, também para cada lista.
 
 ### Funções
+
+#### createEl
+- Criação para cada nó;
+- Consiste em um malloc com inicialização nula em cada um dos campos do nó.
+
+#### createList
+- Alocação de memória para a lista;
+- Inicialização dos nós de raíz e de fim com a função `createEl`.
+
+#### putInfos
+- Função usada para adicionar as informações em um nó específico;
+- Recebemos name, value2k e value90, o name é o nome do estado, value2k é o valor no ano 2000 e value90 valor no ano de 1990.
+
+
+#### insert
+- Essencialmente a mesma função para 90 e 2k, por isso explicação somente uma vez;
+- Nossa lista será organizada de forma decrescente, então nosso maior elemento será o primeiro;
+- Casos de inserção:
+    - Quando a lista está vazia: iniciamos a lista colocando um único elemento como primeiro e último;
+    - Lista não está vazia:
+        - Elemento que será inserido maior que a raiz: o novo elemento será nossa nova raiz. Antigo elemento raiz será o próximo do novo elemento;
+        - Elemento a ser inserido menor que o último: o elemento a ser inserido será nosso novo último elemento, o antigo último recebe o novo como próximo e nosso `list->last` será o novo elemento;
+        - Por fim, temos a inserção no meio da lista, que funcionará da seguinte forma: Teremos um loop que será percorrido enquanto o nó "iterável" (variável que vai receber diversos nós para pecorrer a lista) tiver um próximo diferente de nulo. Dessa forma, sempre iremos comparar se o elemento a ser inserido é maior do que o próximo do nosso nó iterável, quando essa condição for satisfeita, o próximo do nosso novo elemento será o próximo do nó iterável e o próximo do nó iterável será o novo elemento.
+
+### showList
+- Muito similar a estratégia do nó iterável;
+- Fazemos a mesma coisa mas sem reinserção, somente com um printf dentro do for.
