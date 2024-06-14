@@ -98,4 +98,19 @@ Criamos nossa estrutura queue, que tem um array de ponteiro void, pois vamos lid
     - Caso nosso elemento a ser removido não seja operador:
         - Se tivermos um operador guardado e ainda não tivermos nenhuma ocorrência no nosso contador de números consecutivos, guardamos o número no dequedNumber1 e incrementamos um no contador de dois seguidos
         - Caso a gente já tenha uma ocorrência de um número em sequência, ou seja, nosso twoInRow == 1 e tivermos operador, significa que só precisamos de mais um número para aplicarmos a operação, então faremos isso. Fazemos o dequeue na fila e salvamos em dequedNumber2. Após isso, salvamos em queue->result o resultado da nossa operação entre dequedNumber1 e dequedNumber2 com base no dequedOperator. Por fim, só voltamos a reorganizar nossas variáveis para a próxima execução: haveOperator = false já que não temos mais operador, haveApllied = true pois acabamos de fazer uma operação, twoInRow = 0 pois tivemos dois seguidos e queremos voltar a condição inicial, terminamos deixando os nossos dequedNumbers nulos, para reiniciar todas as operações;
-        - Por fim, temos nosso caso de else, que vai consistir na ocorrência de quando temos dequeue em um número e não temos nenhum operador armazenado para aplicarmos a operação, quando isso acontece simplesmente pegamos o elemento e reinserimos ao fim da fila.
+    - Por fim, temos nosso caso de else, que vai consistir na ocorrência de quando temos dequeue em um número e não temos nenhum operador armazenado para aplicarmos a operação, quando isso acontece simplesmente pegamos o elemento e reinserimos ao fim da fila.
+
+## Quest 7
+
+### Structs
+
+#### stElement
+- Estrutura para armazenar os estados;
+- Temos o nome como string, valores para 2000 e 1990 como int e o next (próximo) também como stElement, mas como ponteiro para realizarmos o encadeamento.
+
+#### stList
+- Estrutura para a lista multiencadeada;
+- Temos 4 variáveis de ponteiro stElement, duas que representam source (raíz) da lista, uma para 1990 e outra para 2000;
+- Da mesma forma, também temos duas variáveis para o last, que representa o último elemento, também para cada lista.
+
+### Funções
